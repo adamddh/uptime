@@ -142,11 +142,21 @@ async function runCheckCycle() {
 
   updateOutageStateMachine(cycleStatus, now, lastId);
 
+  const stats24h = db.getUptimeStats(now - 86_400_000);
+  const stats30d = db.getUptimeStats(now - 30 * 86_400_000);
+
   broadcast({
     type: 'check',
     status: cycleStatus,
     latency_ms: avgLatency ? Math.round(avgLatency * 10) / 10 : null,
     checked_at: now,
+    uptime_24h: stats24h.uptime_pct,
+    uptime_30d: stats30d.uptime_pct,
+    active_outage: state.isOutage ? {
+      id: state.activeOutageId,
+      started_at: state.outageStartedAt,
+      duration_ms: now - state.outageStartedAt,
+    } : null,
   });
 
   const dateStr = toLocalDateStr(now);

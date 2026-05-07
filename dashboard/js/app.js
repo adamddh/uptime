@@ -7,6 +7,7 @@ const API = '';
 let ws = null;
 let wsReconnectTimer = null;
 let lastCheckAt = null;
+let activeOutage = null;
 let outageOffset = 0;
 const OUTAGE_PAGE_SIZE = 20;
 
@@ -142,6 +143,7 @@ async function fetchStatus() {
     const d = await r.json();
     applyStatus(d.status, d.latency_ms, d.checked_at, d.active_outage);
     applyUptimeStats(d.uptime_24h, null);
+    activeOutage = d.active_outage ?? null;
   } catch {}
 }
 
@@ -215,12 +217,15 @@ function connectWs() {
     try { msg = JSON.parse(evt.data); } catch { return; }
 
     if (msg.type === 'check') {
-      applyStatus(msg.status, msg.latency_ms, msg.checked_at, null);
+      applyStatus(msg.status, msg.latency_ms, msg.checked_at, msg.active_outage);
+      applyUptimeStats(msg.uptime_24h ?? null, msg.uptime_30d ?? null);
+      activeOutage = msg.active_outage ?? null;
     } else if (msg.type === 'outage_started') {
-      fetchStatus();
+      activeOutage = { started_at: msg.started_at };
       fetchOutages();
+      fetchNines();
     } else if (msg.type === 'outage_ended') {
-      fetchStatus();
+      activeOutage = null;
       fetchOutages();
       fetchNines();
     } else if (msg.type === 'state_sync') {
@@ -239,10 +244,13 @@ function connectWs() {
   };
 }
 
-// ── Last-check ticker ─────────────────────────────────────
+// ── Last-check + outage duration ticker ───────────────────
 setInterval(() => {
   if (lastCheckAt) {
     elLastCheck.textContent = 'Last check: ' + timeSince(lastCheckAt);
+  }
+  if (activeOutage) {
+    elStatusSub.textContent = `Outage: ${formatDuration(Date.now() - activeOutage.started_at)}`;
   }
 }, 1000);
 
