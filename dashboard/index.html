@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Uptime Monitor</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <span class="logo">◈</span>
+      <h1>Uptime Monitor</h1>
+    </div>
+    <div class="header-right">
+      <span id="ws-indicator" class="ws-dot disconnected" title="WebSocket connection"></span>
+      <span id="last-check-label">—</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- Stat cards -->
+    <section class="stat-cards">
+      <div class="card card-status" id="card-status">
+        <div class="card-label">STATUS</div>
+        <div class="card-value" id="status-value">
+          <span class="status-dot" id="status-dot"></span>
+          <span id="status-text">—</span>
+        </div>
+        <div class="card-sub" id="status-sub">Connecting…</div>
+      </div>
+
+      <div class="card card-latency">
+        <div class="card-label">LATENCY</div>
+        <div class="card-value" id="latency-value">—</div>
+        <div class="card-sub">avg last 5 min</div>
+        <canvas id="sparkline" height="40"></canvas>
+      </div>
+
+      <div class="card card-uptime">
+        <div class="card-label">UPTIME 24H</div>
+        <div class="card-value" id="uptime-24h">—</div>
+        <div class="card-sub" id="uptime-24h-sub">—</div>
+      </div>
+
+      <div class="card card-uptime">
+        <div class="card-label">UPTIME 30D</div>
+        <div class="card-value" id="uptime-30d">—</div>
+        <div class="card-sub" id="uptime-30d-sub">—</div>
+      </div>
+    </section>
+
+    <!-- Hourly chart -->
+    <section class="chart-section">
+      <div class="section-header">
+        <h2>TODAY — HOURLY</h2>
+        <span id="today-date" class="section-sub"></span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="hourly-chart"></canvas>
+      </div>
+    </section>
+
+    <!-- 30-day chart -->
+    <section class="chart-section">
+      <div class="section-header">
+        <h2>LAST 30 DAYS</h2>
+        <span class="section-sub">daily availability</span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="daily-chart"></canvas>
+      </div>
+    </section>
+
+    <!-- Nines -->
+    <section class="nines-section">
+      <div class="section-header">
+        <h2>HOW MANY NINES?</h2>
+        <span class="section-sub">uptime reliability rating</span>
+      </div>
+      <div class="nines-layout">
+        <div class="nines-gauge-wrap">
+          <svg id="nines-gauge" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"></svg>
+          <div id="nines-gauge-label" class="nines-center-label">—</div>
+        </div>
+        <div class="nines-table-wrap">
+          <table class="nines-table" id="nines-table">
+            <thead>
+              <tr>
+                <th>Period</th>
+                <th>Uptime</th>
+                <th>Nines</th>
+                <th>Downtime</th>
+              </tr>
+            </thead>
+            <tbody id="nines-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Outages -->
+    <section class="outages-section">
+      <div class="section-header">
+        <h2>RECENT OUTAGES</h2>
+        <span class="section-sub" id="outage-count-label"></span>
+      </div>
+      <div id="outages-list" class="outages-list">
+        <div class="outage-empty">No outages recorded yet.</div>
+      </div>
+      <button id="load-more-btn" class="load-more" style="display:none">Load more</button>
+    </section>
+  </main>
+
+  <script src="/js/vendor/chart.min.js"></script>
+  <script src="/js/nines.js" type="module"></script>
+  <script src="/js/charts.js" type="module"></script>
+  <script src="/js/app.js" type="module"></script>
+</body>
+</html>

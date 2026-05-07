@@ -1,0 +1,22 @@
+{
+  "name": "uptime-monitor",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node src/main.js",
+    "test": "node --test test/*.test.js",
+    "dev": "NODE_ENV=development node --watch src/main.js",
+    "install-service": "bash scripts/install.sh",
+    "uninstall-service": "bash scripts/uninstall.sh",
+    "db:reset": "rm -f data/uptime.db && node -e \"import('./src/db.js').then(m => m.initDb())\"",
+    "db:export": "sqlite3 data/uptime.db .dump > data/backup-$(date +%Y%m%d).sql"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "ws": "^8.18.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
