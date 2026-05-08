@@ -72,7 +72,9 @@ function applyStatus(status, latency_ms, checked_at, active_outage) {
     elStatusSub.textContent = '';
   }
 
-  if (latency_ms !== null && latency_ms !== undefined) {
+  if (status === 'unknown') {
+    elLatency.textContent = '—';
+  } else if (latency_ms !== null && latency_ms !== undefined) {
     elLatency.textContent = `${Math.round(latency_ms)} ms`;
     pushSparklinePoint(latency_ms);
   }

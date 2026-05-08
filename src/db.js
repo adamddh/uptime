@@ -145,7 +145,7 @@ export function getUptimeStats(since_ms) {
 
 export function getHourlyStats(date_str) {
   const [y, m, d] = date_str.split('-').map(Number);
-  const dayStart = Date.UTC(y, m - 1, d);
+  const dayStart = new Date(y, m - 1, d).getTime();
   const dayEnd = dayStart + 86_400_000;
 
   return getDb()
@@ -210,7 +210,7 @@ export function upsertDailyRollup(date_key, stats) {
 
 export function computeAndUpsertRollup(date_str) {
   const [y, m, d] = date_str.split('-').map(Number);
-  const dayStart = Date.UTC(y, m - 1, d);
+  const dayStart = new Date(y, m - 1, d).getTime();
   const dayEnd = dayStart + 86_400_000;
 
   const checks = getDb()

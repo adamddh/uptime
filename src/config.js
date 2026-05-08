@@ -1,8 +1,15 @@
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { existsSync, readFileSync } from 'fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
+
+let local = {};
+const localPath = join(root, 'config.local.json');
+if (existsSync(localPath)) {
+  try { local = JSON.parse(readFileSync(localPath, 'utf8')); } catch {}
+}
 
 export default {
   CHECK_INTERVAL_MS: 5_000,
