@@ -13,7 +13,7 @@
     "db:export": "sqlite3 data/uptime.db .dump > data/backup-$(date +%Y%m%d).sql"
   },
   "dependencies": {
-    "better-sqlite3": "^11.0.0",
+    "better-sqlite3": "^12.9.0",
     "ws": "^8.18.0"
   },
   "engines": {
