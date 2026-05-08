@@ -102,7 +102,7 @@ First uninstall the service, then delete the project folder:
 
 ```bash
 npm run uninstall-service
-rm -rf /Users/adamdenhaan/PycharmProjects/uptime
+rm -rf /path/to/uptime
 ```
 
 > **Important:** uninstall before deleting. If you delete the folder first, launchd will keep trying to restart a missing process every 10 seconds. If that happens, clean up manually:
